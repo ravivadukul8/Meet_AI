@@ -16,12 +16,18 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { OctagonAlertIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().email(),
   password: z.string().min(1, { message: "Password is required" }),
 });
 const SignInView = () => {
+  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -29,6 +35,26 @@ const SignInView = () => {
       password: "",
     },
   });
+
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setError(null);
+
+    authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+        },
+        onError: ({ error }) => {
+          // display the error message
+          setError(error.message);
+        },
+      }
+    );
+  };
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
