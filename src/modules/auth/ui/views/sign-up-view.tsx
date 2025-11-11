@@ -20,7 +20,7 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-
+import { FaGithub, FaGoogle } from "react-icons/fa";
 const formSchema = z
   .object({
     name: z.string().min(1, { message: "Name is required" }),
@@ -54,16 +54,17 @@ const SignUpView = () => {
         name: data.name,
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
           setPending(false);
-
           router.push("/");
         },
         onError: ({ error }) => {
           // display the error message
           setError(error.message);
+          setPending(false);
         },
       }
     );
@@ -181,16 +182,26 @@ const SignUpView = () => {
                     type="button"
                     className="w-full"
                     disabled={pending}
+                    onClick={() => {
+                      authClient.signIn.social({
+                        provider: "google",
+                      });
+                    }}
                   >
-                    Google
+                    <FaGoogle />
                   </Button>
                   <Button
                     variant="outline"
                     type="button"
                     className="w-full"
                     disabled={pending}
+                    onClick={() => {
+                      authClient.signIn.social({
+                        provider: "github",
+                      });
+                    }}
                   >
-                    Github
+                    <FaGithub />
                   </Button>
                 </div>
                 <div className="text-center text-sm">
