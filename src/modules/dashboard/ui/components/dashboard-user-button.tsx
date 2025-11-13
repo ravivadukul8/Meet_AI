@@ -46,7 +46,11 @@ const DashboardUserButton = () => {
         </div>
         <ChevronDownIcon className="size-4 shrink-0" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" side="right" className="w-72">
+      <DropdownMenuContent
+        align="end"
+        side="right"
+        className="w-72 bg-gray-300"
+      >
         <DropdownMenuLabel>
           <div className="flex flex-col gap-1">
             <span className="font-medium truncate">{data.user.name}</span>
