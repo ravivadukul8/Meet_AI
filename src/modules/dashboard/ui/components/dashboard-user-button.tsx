@@ -1,5 +1,14 @@
 import { GeneratedAvatar } from "@/components/gernerated-avatar";
 import { Avatar } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -7,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { authClient } from "@/lib/auth-client";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import { DropdownMenuContent } from "@radix-ui/react-dropdown-menu";
@@ -16,6 +26,7 @@ import { useRouter } from "next/navigation";
 const DashboardUserButton = () => {
   const { data, isPending } = authClient.useSession();
   const router = useRouter();
+  const isMobile = useIsMobile();
   const onLogout = async () => {
     await authClient.signOut({
       fetchOptions: {
@@ -26,9 +37,49 @@ const DashboardUserButton = () => {
     });
   };
   if (isPending || !data?.user) return <p>Loading...</p>;
+
+  if (isMobile) {
+    return (
+      <Drawer>
+        <DrawerTrigger className="rounded-lg border border-border/10 p-3 w-full flex flex-items-center justify-between bg-white/5 hover:bg-white/10 overflow-hidden gap-x-2">
+          {data.user.image ? (
+            <Avatar>
+              <AvatarImage src={data?.user?.image} />
+            </Avatar>
+          ) : (
+            <GeneratedAvatar
+              seed={data.user.name}
+              variant="botttsNeutral"
+              className="size-9 mr-3"
+            />
+          )}
+          <div className="flex flex-col gap-0.5 text-left overflow-hidden flex-1 min-w-0">
+            <p className="text-sm truncate w-full">{data.user.name}</p>
+            <p className="text-xs truncate w-full">{data.user.email}</p>
+          </div>
+          <ChevronDownIcon className="size-4 shrink-0" />
+        </DrawerTrigger>
+        <DrawerContent>
+          <DrawerTitle>
+            <DrawerTitle>{data.user.name}</DrawerTitle>
+            <DrawerDescription>{data.user.email}</DrawerDescription>
+          </DrawerTitle>
+          <DrawerFooter>
+            <Button variant="outline" onClick={() => {}}>
+              {" "}
+              Billing <CreditCardIcon className="size-4 text-black" />
+            </Button>
+            <Button variant="outline" onClick={onLogout}>
+              Logout <LogOutIcon className="size-4" />
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+  }
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-lg border border-border/10 p-3 w-full flex flex-items-center justify-between bg-white/5 hover:bg-white/10 overflow-hidden">
+      <DropdownMenuTrigger className="rounded-lg border border-border/10 p-3 w-full flex flex-items-center justify-between bg-white/5 hover:bg-white/10 overflow-hidden gap-x-2">
         {data.user.image ? (
           <Avatar>
             <AvatarImage src={data?.user?.image} />
