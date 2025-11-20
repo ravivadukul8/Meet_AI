@@ -5,32 +5,36 @@ import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { ErrorBoundary } from "react-error-boundary";
 import { Suspense } from "react";
 import ErrorState from "@/components/error-state";
+import AgentsListHeader from "@/modules/agents/ui/components/agents-list-header";
 
 const Page = () => {
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.agents.getMany.queryOptions());
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Suspense
-        fallback={
-          <LoadingState
-            title="Loading Agents"
-            description="This May take a few seconds"
-          />
-        }
-      >
-        <ErrorBoundary
+    <>
+      <AgentsListHeader />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Suspense
           fallback={
-            <ErrorState
-              title="Agents Load Fails"
-              description="Please check your connection"
+            <LoadingState
+              title="Loading Agents"
+              description="This May take a few seconds"
             />
           }
         >
-          <AgentsView />
-        </ErrorBoundary>
-      </Suspense>
-    </HydrationBoundary>
+          <ErrorBoundary
+            fallback={
+              <ErrorState
+                title="Agents Load Fails"
+                description="Please check your connection"
+              />
+            }
+          >
+            <AgentsView />
+          </ErrorBoundary>
+        </Suspense>
+      </HydrationBoundary>
+    </>
   );
 };
 
