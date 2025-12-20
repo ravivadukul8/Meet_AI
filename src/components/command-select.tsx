@@ -46,11 +46,15 @@ export const CommandSelect = ({
         <div>{selectedOption?.children ?? placeholder}</div>
         <ChevronsUpDownIcon />
       </Button>
-      <CommandResponsiveDialog open={open} onOpenChange={setOpen}>
+      <CommandResponsiveDialog
+        shouldFilter={!onSearch}
+        open={open}
+        onOpenChange={setOpen}
+      >
         <CommandInput placeholder="Search..." onValueChange={onSearch} />
         <CommandList>
           {" "}
-          <CommandEmpty className="text-muted-foreground text-sm">
+          <CommandEmpty className="text-muted-foreground text-sm text-center p-5">
             <span>No Options Found</span>
           </CommandEmpty>
           {options.map((option) => (
