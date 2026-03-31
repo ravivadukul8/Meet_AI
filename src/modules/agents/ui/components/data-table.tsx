@@ -11,8 +11,8 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
-  TableHeader,
+  // TableHead,
+  // TableHeader,
   TableRow,
 } from "@/components/ui/table";
 
