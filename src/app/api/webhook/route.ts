@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
     //   instructions: existingAgent.instructions,
     // });
     console.log("ENTER");
-    await fetch("http://localhost:8000/start-agent", {
+    await fetch("https://agent-issy.onrender.com/start-agent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
