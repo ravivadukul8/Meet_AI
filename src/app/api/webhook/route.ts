@@ -94,23 +94,23 @@ async function processWebhook(payload: unknown) {
 
       // 🔥 call your FastAPI server (agent)
 
-      await inngest.send({
-        name: "agent/start",
-        data: {
-          callId: meetingId,
-          agentUserId: existingAgent.id,
-          instructions: existingAgent.instructions,
-        },
-      });
-      // fetch("https://agent-issy.onrender.com/start-agent", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
+      // await inngest.send({
+      //   name: "agent/start",
+      //   data: {
       //     callId: meetingId,
       //     agentUserId: existingAgent.id,
       //     instructions: existingAgent.instructions,
-      //   }),
-      // }).catch(console.error);
+      //   },
+      // });
+      fetch("https://agent-issy.onrender.com/start-agent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          callId: meetingId,
+          agentUserId: existingAgent.id,
+          instructions: existingAgent.instructions,
+        }),
+      }).catch(console.error);
     }
 
     // =========================
